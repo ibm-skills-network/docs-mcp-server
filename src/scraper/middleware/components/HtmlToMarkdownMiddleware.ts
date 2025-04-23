@@ -53,12 +53,10 @@ export class HtmlToMarkdownMiddleware implements ContentProcessorMiddleware {
           }
         }
 
-        const brElements = element.querySelectorAll("br");
-        if (brElements.length > 0) {
-          for (const br of brElements) {
-            br.replaceWith("\n");
-          }
+        for (const br of Array.from(element.querySelectorAll("br"))) {
+          br.replaceWith("\n");
         }
+
         const text = element.textContent || "";
 
         return `\n\`\`\`${language}\n${text.replace(/^\n+|\n+$/g, "")}\n\`\`\`\n`;

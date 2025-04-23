@@ -1,8 +1,8 @@
 #!/usr/bin/env node
-import { startServer } from "./mcp";
+import { startHttp } from "./http.js";
 import { logger } from "./utils/logger";
 
-startServer().catch((error) => {
+startHttp().catch((error) => {
   logger.error(`❌ Fatal Error: ${error}`);
   process.exit(1);
 });
