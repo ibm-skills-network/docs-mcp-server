@@ -1,0 +1,18 @@
+services:
+  docs-mcp-server:
+    image: icr.io/skills-network/docs-mcp-server:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
+    platform: linux/amd64
+    container_name: docs-mcp-server
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env
+    volumes:
+      - docs-mcp-data:/data
+
+volumes:
+  docs-mcp-data:
+    name: docs-mcp-data

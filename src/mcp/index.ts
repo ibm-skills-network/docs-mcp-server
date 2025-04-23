@@ -1,7 +1,6 @@
 #!/usr/bin/env node
 import "dotenv/config";
 import { McpServer, ResourceTemplate } from "@modelcontextprotocol/sdk/server/mcp.js";
-import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { z } from "zod";
 import { DEFAULT_MAX_DEPTH, DEFAULT_MAX_PAGES } from "../config";
 import { PipelineManager } from "../pipeline/PipelineManager";
@@ -23,7 +22,7 @@ import {
 import { LogLevel, logger, setLogLevel } from "../utils/logger"; // Import LogLevel and setLogLevel
 import { createError, createResponse } from "./utils";
 
-export async function startServer() {
+export async function setupServer(): Promise<McpServer | undefined> {
   // Set the default log level for the server to ERROR
   setLogLevel(LogLevel.ERROR);
 
@@ -541,11 +540,6 @@ ${formattedResults.join("")}`,
       },
     );
 
-    // Start server
-    const transport = new StdioServerTransport();
-    await server.connect(transport);
-    logger.info("Documentation MCP server running on stdio");
-
     // Handle cleanup
     process.on("SIGINT", async () => {
       await pipelineManager.stop(); // Stop the pipeline manager
@@ -553,6 +547,8 @@ ${formattedResults.join("")}`,
       await server.close();
       process.exit(0);
     });
+
+    return server;
   } catch (error) {
     await docService.shutdown(); // Ensure docService shutdown on error too
     logger.error(`❌ Fatal Error: ${error}`);
