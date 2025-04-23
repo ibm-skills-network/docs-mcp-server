@@ -40,3 +40,5 @@ VOLUME /data
 
 # Set the command to run the application
 CMD ["node", "dist/server.js"]
+
+EXPOSE 3000

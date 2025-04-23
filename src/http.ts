@@ -18,6 +18,11 @@ export async function startHttp() {
   // -------------------------------------------------------------
   const transports: Record<string, StreamableHTTPServerTransport> = {};
 
+  // Health route to verify server is running
+  app.get("/health", (_req: Request, res: Response) => {
+    res.status(200).json({ status: "ok" });
+  });
+
   // -------------------------------------------------------------
   //  POST /mcp  ⟶  JSON-RPC request (init or follow-up)
   // -------------------------------------------------------------
